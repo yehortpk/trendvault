@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / compiled files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env/
+
+# Editor/IDE specific files
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Test and coverage files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs and databases
+*.log
+*.sqlite3*
+
+# Configuration and environment variables
+.env
+.flaskenv
+instance/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# MyPy
+.mypy_cache/
+
+# History extension
+.history/
