@@ -135,3 +135,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 if not YOUTUBE_API_KEY:
     raise ValueError("Environment variable YOUTUBE_API_KEY not set")
+
+# Celery Configuration Options
+CELERY_BROKER_URL = f"{os.getenv("CELERY_BROKER_URL")}/0"
+CELERY_RESULT_BACKEND = f"{os.getenv("CELERY_BROKER_URL")}/1"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "Europe/Kyiv"
