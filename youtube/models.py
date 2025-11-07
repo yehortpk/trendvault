@@ -36,7 +36,10 @@ class Video(models.Model):
 
     channel_id = models.CharField(max_length=50)
     channel_title = models.CharField(max_length=200)
-    thumb_path = models.ImageField(upload_to='video/thumbnails/', null=True)
+    thumb_url = models.URLField()
+
+    def __str__(self):
+        return self.title
 
     comments_count = models.IntegerField()
     views_count = models.IntegerField()

@@ -40,7 +40,7 @@ def unload_categories(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('youtube', '0001_create_and_populate_regions'),
+        ('youtube', '0001_create_and_populate_youtube_regions'),
     ]
 
     operations = [

@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('youtube', '0002_create_and_populate_categories'),
+        ('youtube', '0002_create_and_populate_youtube_categories'),
     ]
 
     operations = [
@@ -20,10 +20,7 @@ class Migration(migrations.Migration):
                 ('published_at', models.DateTimeField()),
                 ('channel_id', models.CharField(max_length=50)),
                 ('channel_title', models.CharField(max_length=200)),
-                ('thumb_path', models.ImageField(null=True, upload_to='video/thumbnails/')),
-                ('comments_count', models.IntegerField()),
-                ('views_count', models.IntegerField()),
-                ('likes_count', models.IntegerField()),
+                ('thumb_url', models.URLField()),
                 ('category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='youtube.category')),
                 ('region', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='youtube.region')),
             ],
