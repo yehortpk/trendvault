@@ -13,6 +13,7 @@ import dj_database_url
 import os
 
 from pathlib import Path
+from celery.schedules import crontab
 
 from dotenv import load_dotenv
 
@@ -147,3 +148,10 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Kyiv"
+
+CELERY_BEAT_SCHEDULE = {
+    "collect-youtube-video-statistics-hourly": {
+        "task": "youtube.tasks.fetch_trending_videos",
+        "schedule": crontab(minute=0),
+    },
+}
