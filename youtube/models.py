@@ -41,9 +41,20 @@ class Video(models.Model):
     def __str__(self):
         return self.title
 
+
+class VideoStatsSnapshot(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, db_index=True)
+    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
     comments_count = models.IntegerField()
     views_count = models.IntegerField()
     likes_count = models.IntegerField()
 
+    class Meta:
+        ordering = ["-timestamp"]
+        # Separate index for video and timestamp for faster statistics range queries
+        indexes = [
+            models.Index(fields=["video", "timestamp"]),
+        ]
+
     def __str__(self):
-        return self.title
+        return f"Stats for {self.video.title} at {self.timestamp}"

@@ -1,10 +1,11 @@
+import datetime
 import os
 
 import googleapiclient.discovery
 
 from celery import shared_task
 
-from youtube.models import Region, Video
+from youtube.models import Region, Video, VideoStatsSnapshot
 
 
 @shared_task
@@ -17,8 +18,7 @@ def fetch_trending_videos():
         api_service_name, api_version, developerKey=api_key
     )
 
-    for region in Region.objects.all()[:5]:
-
+    for region in Region.objects.all():
         request = youtube.videos().list(
             part="snippet,statistics",
             chart="mostPopular",
@@ -29,17 +29,23 @@ def fetch_trending_videos():
         items = response.get("items", [])
 
         for video_data in items:
-            Video.objects.update_or_create(
+            video, saved = Video.objects.update_or_create(
                 id=video_data["id"],
                 defaults={
                     "title": video_data["snippet"]["title"],
                     "published_at": video_data["snippet"]["publishedAt"],
                     "channel_id": video_data["snippet"]["channelId"],
                     "channel_title": video_data["snippet"]["channelTitle"],
-                    "comments_count": int(video_data["statistics"].get("commentCount", 0)),
-                    "views_count": int(video_data["statistics"].get("viewCount", 0)),
-                    "likes_count": int(video_data["statistics"].get("likeCount", 0)),
                     "category_id": int(video_data["snippet"]["categoryId"]),
                     "region_id": region.code,
+                    "thumb_url": video_data["snippet"]["thumbnails"]["high"]["url"],
                 }
+            )
+
+            VideoStatsSnapshot.objects.create(
+                video=video,
+                timestamp=datetime.datetime.now().replace(minute=0, second=0, microsecond=0),
+                comments_count=int(video_data["statistics"].get("commentCount", 0)),
+                views_count=int(video_data["statistics"].get("viewCount", 0)),
+                likes_count=int(video_data["statistics"].get("likeCount", 0)),
             )
