@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower()
 
 ALLOWED_HOSTS = []
 
@@ -79,10 +79,14 @@ if not DATABASE_URL:
     raise ValueError("DATABASE_URL is not set in the environment")
 
 DATABASES = {
-    "default": dj_database_url.parse(
-        DATABASE_URL,
-        conn_max_age=600,  # Persistent connection for performance
-    )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "youtube"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+    }
 }
 
 
