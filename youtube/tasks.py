@@ -36,7 +36,6 @@ def fetch_trending_videos():
                     "channel_id": video_data["snippet"]["channelId"],
                     "channel_title": video_data["snippet"]["channelTitle"],
                     "category_id": int(video_data["snippet"]["categoryId"]),
-                    "region_id": region.code,
                     "thumb_url": video_data["snippet"]["thumbnails"]["high"]["url"],
                 }
             )

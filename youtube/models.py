@@ -33,7 +33,6 @@ class Video(models.Model):
     title = models.CharField(max_length=200)
     published_at = models.DateTimeField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
 
     channel_id = models.CharField(max_length=50)
     channel_title = models.CharField(max_length=200)
@@ -49,7 +48,7 @@ class VideoStatsSnapshot(models.Model):
     comments_count = models.IntegerField()
     views_count = models.IntegerField()
     likes_count = models.IntegerField()
-    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
+    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, related_name="stats_snapshots")
 
     class Meta:
         ordering = ["-timestamp"]
