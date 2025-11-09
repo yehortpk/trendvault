@@ -46,3 +46,8 @@ build/
 
 # History extension
 .history/
+
+# Celery temporary files
+*.pid
+*.log
+celerybeat-schedule*
