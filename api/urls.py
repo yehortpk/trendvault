@@ -1,7 +1,5 @@
-from django.urls import path
-
-from api.views import VideoDetailView
+from django.urls import include, path
 
 urlpatterns = [
-    path('<str:id>/', VideoDetailView.as_view(), name='video-detail'),
+    path("youtube/", include("youtube.urls")),
 ]
