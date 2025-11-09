@@ -44,7 +44,7 @@ class Video(models.Model):
 
 class VideoStatsSnapshot(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE, db_index=True)
-    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+    timestamp = models.DateTimeField(db_index=True)
     comments_count = models.IntegerField()
     views_count = models.IntegerField()
     likes_count = models.IntegerField()

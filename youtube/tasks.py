@@ -1,9 +1,8 @@
-import datetime
 import os
 
 import googleapiclient.discovery
-
 from celery import shared_task
+from django.utils import timezone
 
 from youtube.models import Region, Video, VideoStatsSnapshot
 
@@ -42,10 +41,13 @@ def fetch_trending_videos():
                 }
             )
 
-            VideoStatsSnapshot.objects.create(
+            VideoStatsSnapshot.objects.update_or_create(
                 video=video,
-                timestamp=datetime.datetime.now().replace(minute=0, second=0, microsecond=0),
-                comments_count=int(video_data["statistics"].get("commentCount", 0)),
-                views_count=int(video_data["statistics"].get("viewCount", 0)),
-                likes_count=int(video_data["statistics"].get("likeCount", 0)),
+                timestamp=timezone.now().replace(minute=0, second=0, microsecond=0),
+                region_id=region.code,
+                defaults={
+                    "comments_count": int(video_data["statistics"].get("commentCount", 0)),
+                    "views_count": int(video_data["statistics"].get("viewCount", 0)),
+                    "likes_count": int(video_data["statistics"].get("likeCount", 0))
+                }
             )
