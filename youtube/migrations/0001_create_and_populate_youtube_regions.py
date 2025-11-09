@@ -2,11 +2,12 @@
 
 import os
 
-from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 from django.db import migrations, models
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
-from django.conf import settings
+
+from youtube.models import static_storage
 
 
 # Functions from the following migrations need manual copying.
@@ -58,10 +59,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('code', models.CharField(max_length=5, primary_key=True, serialize=False)),
                 ('title', models.CharField(max_length=100)),
-                ('thumb_path', models.ImageField(
-                    null=True,
-                    upload_to='regions/',
-                    storage=FileSystemStorage(location=str(settings.STATIC_BASE_DIR) + '/regions/flags'))),
+                ('thumb_path', models.ImageField(null=True, storage=static_storage, upload_to='regions/flags')),
             ],
         ),
         migrations.RunPython(load_regions, reverse_code=unload_regions),

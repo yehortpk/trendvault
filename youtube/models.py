@@ -4,7 +4,8 @@ from django.db import models
 from trendvault import settings
 
 
-static_storage = FileSystemStorage(location=str(settings.STATIC_BASE_DIR))
+def static_storage():
+    return FileSystemStorage(location=str(settings.STATIC_BASE_DIR))
 
 
 class Region(models.Model):
@@ -43,11 +44,12 @@ class Video(models.Model):
 
 
 class VideoStatsSnapshot(models.Model):
-    video = models.ForeignKey(Video, on_delete=models.CASCADE, db_index=True)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, db_index=True, related_name="stats_snapshots")
     timestamp = models.DateTimeField(db_index=True)
     comments_count = models.IntegerField()
     views_count = models.IntegerField()
     likes_count = models.IntegerField()
+    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         ordering = ["-timestamp"]

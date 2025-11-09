@@ -16,11 +16,14 @@ class Migration(migrations.Migration):
             name='VideoStatsSnapshot',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('timestamp', models.DateTimeField(auto_now_add=True, db_index=True)),
+                ('timestamp', models.DateTimeField(db_index=True)),
                 ('comments_count', models.IntegerField()),
                 ('views_count', models.IntegerField()),
                 ('likes_count', models.IntegerField()),
-                ('video', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='youtube.video')),
+                ('video', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stats_snapshots', to='youtube.video')),
+                ('region', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='youtube.region')),
+
+
             ],
             options={
                 'ordering': ['-timestamp'],
