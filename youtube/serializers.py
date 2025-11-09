@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from youtube.models import Video, VideoStatsSnapshot
+from youtube.models import Region, Video, VideoStatsSnapshot
 
 
 class VideoSnapshotStatSerializer(serializers.ModelSerializer):
@@ -35,7 +35,6 @@ class VideoSerializer(serializers.ModelSerializer):
             "title",
             "published_at",
             "category",
-            "region",
             "channel_id",
             "channel_title",
             "thumb_url",
@@ -46,3 +45,43 @@ class VideoSerializer(serializers.ModelSerializer):
         # Get one snapshot per timestamp
         distinct_timestamps = obj.stats_snapshots.order_by('timestamp').distinct('timestamp')
         return VideoSnapshotStatSerializer(distinct_timestamps, many=True).data
+
+
+class SimpleVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = [
+            "id",
+            "title",
+            "published_at",
+            "category",
+            "channel_id",
+            "channel_title",
+            "thumb_url",
+        ]
+
+
+class RegionVideoSnapshotStatSerializer(serializers.ModelSerializer):
+    video = SimpleVideoSerializer(read_only=True)
+
+    class Meta:
+        model = VideoStatsSnapshot
+        fields = [
+            "video",
+            "comments_count",
+            "views_count",
+            "likes_count",
+        ]
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    stats_snapshots = RegionVideoSnapshotStatSerializer(many=True)
+
+    class Meta:
+        model = Region
+        fields = [
+            "code",
+            "title",
+            "thumb_path",
+            "stats_snapshots"
+        ]
