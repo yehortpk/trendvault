@@ -1,8 +1,6 @@
-from django.urls import path
-
-from youtube.views import RegionDetailView, VideoDetailView
+from django.urls import include, path
 
 urlpatterns = [
-    path("video/<str:id>/", VideoDetailView.as_view(), name="video-detail"),
-    path("region/<str:code>", RegionDetailView.as_view(), name="region-detail")
+    path("video/", include("youtube.video.urls")),
+    path("region/", include("youtube.region.urls")),
 ]

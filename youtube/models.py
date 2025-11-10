@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 
@@ -59,3 +61,43 @@ class VideoStatsSnapshot(models.Model):
 
     def __str__(self):
         return f"Stats for {self.video.title} at {self.timestamp}"
+
+    @staticmethod
+    def convert_pseudo_timestamp_to_timezone(pseudo_timestamp: str) -> datetime:
+        """
+        Convert a pseudo timestamp string in format 'ddmmyy:hh' to a datetime object
+
+        Args:
+            pseudo_timestamp (str): Timestamp string in format 'ddmmyy:hh'
+                                  Example: '091123:14' for Nov 9, 2023 14:00
+
+        Returns:
+            datetime.datetime: Converted timezone-aware datetime object
+
+        Raises:
+            ValueError: If the pseudo_timestamp format is invalid
+        """
+        try:
+            date_part, hour = pseudo_timestamp.split(':')
+            day = int(date_part[:2])
+            month = int(date_part[2:4])
+            year = int('20' + date_part[4:6])  # Assuming years 2000-2099
+            hour = int(hour)
+
+            # Create datetime with zeroed minutes/seconds
+            result = datetime(
+                year=year,
+                month=month,
+                day=day,
+                hour=hour,
+                minute=0,
+                second=0,
+                microsecond=0
+            )
+
+            return result
+
+        except (ValueError, IndexError) as e:
+            raise ValueError(
+                f"Invalid timestamp format. Expected 'ddmmyy:hh', got '{pseudo_timestamp}'"
+            ) from e
