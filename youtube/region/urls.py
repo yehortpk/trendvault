@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from youtube.views import RegionDetailView, RegionListView
+from youtube.region.views import RegionDetailView, RegionListView
 
 urlpatterns = [
     path("", RegionListView.as_view(), name="region-list"),
